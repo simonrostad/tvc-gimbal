@@ -1,18 +1,26 @@
 #include <Arduino.h>
+#include <MPU6050.h>
+MPU6050 mpu;
+int16_t ax, ay, az, gx, gy, gz;
 
-// put function declarations here:
-int myFunction(int, int);
+
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(9600);
+  Serial.println("Initializing MPU6050...");
+  Wire.begin();
+  mpu.initialize();
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+  float pitch, roll;
+pitch = atan2(ay, az) * 180 / PI;
+roll = atan2(-ax, az) * 180 / PI;
+  Serial.print("Pitch: ");
+Serial.println(pitch);
+  Serial.print("Roll: ");
+Serial.println(roll);
+delay(500);
 }
